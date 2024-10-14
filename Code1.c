@@ -1,4 +1,5 @@
 #include <stdio.h>
+#define MONTHS 12
 void month_sales(double sales_fig[12], char months[12][10]) {
     printf("\nMonthly Sales Report:\n");
     printf("Month   Sales\n");
@@ -39,21 +40,25 @@ void sales_summary(double sales_fig[12], char month[12][10]) {
 }
 void moving_average(double sales_fig[12], char month[12][10]) {
     printf("\nSix-Month moving average report:\n");
-    double jan_jun, feb_jul, mar_aug, apr_sep, may_oct, jul_dec = 0.0;
     double six = 6.0;
 /*These doubles will be utilized throughout the remainder of the fucntion*/
+    double jan_jun = 0.0;
     for (int r = 0; r <= 5; r++) {
         jan_jun = jan_jun + sales_fig[r];
     }
+    double feb_jul = 0.0;
     for (int s = 1; s <= 6; s++){
         feb_jul = feb_jul + sales_fig[s];
     }
+    double mar_aug = 0.0;
     for (int t = 2; t <= 7; t++) {
         mar_aug = mar_aug + sales_fig[t];
     }
+    double apr_sep = 0.0;
     for (int u = 3; u <= 8; u++) {
         apr_sep = apr_sep + sales_fig[u];
     }
+    double may_oct = 0.0;
     for (int v = 4; v <= 9; v++) {
         may_oct = may_oct + sales_fig[v];
     }
@@ -61,6 +66,7 @@ void moving_average(double sales_fig[12], char month[12][10]) {
     for (int w = 5; w <= 10; w++) {
         jun_nov = jun_nov + sales_fig[w];
     }
+    double jul_dec = 0.0;
     for (int x = 6; x <= 11; x++) {
         jul_dec = jul_dec + sales_fig[x];
     }
@@ -100,16 +106,26 @@ void sales_report(double sales_fig[12], char month[12][10]) {
 }
 int main() {
     int input_num = 0;
-    double sales_fig[12];
-    char months[12][10] = {"January", "February", "March", "April", "May", "June", "July", "August","September", "October","November","December"};
+    double sales_fig[MONTHS];
+    char months[12][10] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November","December"};
 /*These are the variables and arrays that will be used throughout the remainder of the program.*/
-    while (input_num < 12) {
-        double num;
-        printf("Enter a monthly sales figure: ");
-        scanf("%lf", &num);
-        sales_fig[input_num] = num;
-        input_num = input_num + 1;
+    FILE *input_file;
+    input_file = fopen("sales.txt", "r");
+    if (input_file == NULL) {
+        input_file = fopen("sales.txt", "r");
+        perror("Error opening file");
+        printf("Couldn't open 'sales.txt'.\n");
+        return 0;
     }
+    for (int i = 0; i < MONTHS; i++) {
+        if (fscanf(input_file, "%lf", &sales_fig[i]) != 1) {
+            printf("Invalid input in file\n");
+            fclose(input_file);
+            return 0;
+        }
+    }
+    fclose(input_file);
+
 /*This code asks the user for a monthly sales figure 12 times and inputs those integers into an array*/
     month_sales(sales_fig, months);
     sales_summary(sales_fig, months);
