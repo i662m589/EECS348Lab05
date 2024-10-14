@@ -108,13 +108,16 @@ int main() {
     int input_num = 0;
     double sales_fig[MONTHS];
     char months[12][10] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November","December"};
+    char filename[100];
+    printf("Input a file name: ");
+    scanf("%s", filename);
 /*These are the variables and arrays that will be used throughout the remainder of the program.*/
     FILE *input_file;
-    input_file = fopen("sales.txt", "r");
+    input_file = fopen(filename, "r");
     if (input_file == NULL) {
-        input_file = fopen("sales.txt", "r");
+        input_file = fopen(filename, "r");
         perror("Error opening file");
-        printf("Couldn't open 'sales.txt'.\n");
+        printf("Couldn't open %s.\n", filename);
         return 0;
     }
     for (int i = 0; i < MONTHS; i++) {
